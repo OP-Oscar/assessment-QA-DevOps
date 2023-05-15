@@ -1,6 +1,23 @@
+require('dotenv').config()
 const express = require("express");
 const bots = require(`./src/botsData`);
 const shuffle = require("./src/shuffle");
+
+
+const {ROLLBAR_ACCESS_TOKEN} = process.env;
+
+// include and initialize the rollbar library with your access token
+var Rollbar = require('rollbar')
+var rollbar = new Rollbar({
+  accessToken: ROLLBAR_ACCESS_TOKEN,
+  captureUncaught: true,
+  captureUnhandledRejections: true,
+})
+
+// record a generic message and send it to Rollbar
+rollbar.log('Hello world!')
+
+
 
 const playerRecord = {
   wins: 0,
@@ -17,6 +34,7 @@ const calculateTotalHealth = (robots) =>
 
 // Add up the total damage of all the attacks of all the robots
 const calculateTotalAttack = (robots) =>
+  rollbar.info('Total attack was requested to calculate')
   robots
     .map(({ attacks }) =>
       attacks.reduce((total, { damage }) => total + damage, 0)
@@ -40,6 +58,7 @@ app.get("/api/robots", (req, res) => {
   try {
     res.status(200).send(bots);
   } catch (error) {
+    rollbar.critical("Error getting bots")
     console.error("ERROR GETTING BOTS", error);
     res.sendStatus(400);
   }
@@ -48,6 +67,7 @@ app.get("/api/robots", (req, res) => {
 app.get("/api/robots/shuffled", (req, res) => {
   try {
     let shuffled = shuffle(bots);
+    rollbar.info("Bots have been shuffled")
     res.status(200).send(shuffled);
   } catch (error) {
     console.error("ERROR GETTING SHUFFLED BOTS", error);
@@ -81,7 +101,9 @@ app.post("/api/duel", (req, res) => {
 app.get("/api/player", (req, res) => {
   try {
     res.status(200).send(playerRecord);
+    rollbar.info("Successfully obtained player stats")
   } catch (error) {
+    rollbar.error("Error getting player stats")
     console.log("ERROR GETTING PLAYER STATS", error);
     res.sendStatus(400);
   }

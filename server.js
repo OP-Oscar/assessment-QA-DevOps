@@ -1,6 +1,7 @@
 require('dotenv').config()
 const express = require("express");
 const bots = require(`./src/botsData`);
+const cors = require('cors');
 const shuffle = require("./src/shuffle");
 
 
@@ -23,8 +24,12 @@ const playerRecord = {
   wins: 0,
   losses: 0,
 };
+
+
 const app = express();
+app.use(cors());
 app.use(express.static(`${__dirname}/public`))
+// app.use(express.static(`public`))
 // app.use(express.static(path.join(__dirname,'/public'))) //=> alternate way to write line 10 
 app.use(express.json());
 
@@ -34,9 +39,8 @@ const calculateTotalHealth = (robots) =>
 
 // Add up the total damage of all the attacks of all the robots
 const calculateTotalAttack = (robots) =>
-  rollbar.info('Total attack was requested to calculate')
-  robots
-    .map(({ attacks }) =>
+
+    robots.map(({ attacks }) =>
       attacks.reduce((total, { damage }) => total + damage, 0)
     )
     .reduce((total, damage) => total + damage, 0);
@@ -109,6 +113,6 @@ app.get("/api/player", (req, res) => {
   }
 });
 
-app.listen(8000, () => {
-  console.log(`Listening on 8000`);
+app.listen(4000, () => {
+  console.log(`Listening on 4000`);
 });

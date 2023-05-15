@@ -23,8 +23,8 @@ chooseHeader.classList.add("hide");
 yourDuoHeader.classList.add("hide");
 compDuoHeader.classList.add("hide");
 
-// const baseURL = 'http://localhost:4000'
-const baseURL = '..'
+const baseURL = 'http://localhost:4000'
+// const baseURL = '..'
 
 const makeRobotChoiceCard = (bot) => {
   return `

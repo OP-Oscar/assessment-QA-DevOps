@@ -1,5 +1,5 @@
 const express = require("express");
-const bots = require("./src/botsData");
+const bots = require(`./src/botsData`);
 const shuffle = require("./src/shuffle");
 
 const playerRecord = {
@@ -38,7 +38,7 @@ const calculateHealthAfterAttack = ({ playerDuo, compDuo }) => {
 
 app.get("/api/robots", (req, res) => {
   try {
-    res.status(200).send(botsArr);
+    res.status(200).send(bots);
   } catch (error) {
     console.error("ERROR GETTING BOTS", error);
     res.sendStatus(400);

@@ -3,14 +3,15 @@ const express = require("express");
 const bots = require(`./src/botsData`);
 const cors = require('cors');
 const shuffle = require("./src/shuffle");
+const path = require('path')
 
 
-const {ROLLBAR_ACCESS_TOKEN} = process.env;
+const { ROLLBAR_ACCESS_TOKEN } = process.env;
 
 // include and initialize the rollbar library with your access token
 var Rollbar = require('rollbar')
 var rollbar = new Rollbar({
-  accessToken: ROLLBAR_ACCESS_TOKEN,
+  accessToken:`${ROLLBAR_ACCESS_TOKEN}`,
   captureUncaught: true,
   captureUnhandledRejections: true,
 })
@@ -28,10 +29,10 @@ const playerRecord = {
 
 const app = express();
 app.use(cors());
-app.use(express.static(`${__dirname}/public`))
-// app.use(express.static(`public`))
-// app.use(express.static(path.join(__dirname,'/public'))) //=> alternate way to write line 10 
 app.use(express.json());
+// app.use(express.static(`${__dirname}/public`))
+app.use(express.static(`public`))
+
 
 // Add up the total health of all the robots
 const calculateTotalHealth = (robots) =>
